@@ -25,7 +25,7 @@ initial_velocity: float  = 0.0  # m / s
 Earth = Body(
     name="Earth",
     mass=5.972e24,
-    radius=6371008.771
+    radius=6371008.771,
     )
 
 Moon = Body(
@@ -34,6 +34,6 @@ Moon = Body(
     radius=1737.4e3,
     parent_body=Earth,
     initial_distance=384784e3,
-    initial_angle=math.radians(134)
-    initial_velocity=1.022e3
+    initial_angle=math.radians(134),
+    initial_velocity=1.022e3,
     )

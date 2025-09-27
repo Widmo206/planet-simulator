@@ -8,18 +8,18 @@ Contributors:
 
 
 from __future__ import annotations
-import turtle as t
 import numpy as np
 from dataclasses import dataclass
-from beartype import beartype
+#from beartype import beartype
 from uuid import uuid4, UUID
 
 
 G = 6.6743e-11 # m^3 / (kg * s^2)
 
 
-def main():
-    ...
+class BodyNotFoundError(ValueError):
+    """Raised when looking for a Body or PhysicsBody that doesn't exist."""
+    pass
 
 
 class Vector2(object):
@@ -98,6 +98,12 @@ class Vector2(object):
         return displacement.normalized()
     
     
+    @staticmethod
+    def from_polar(angle: float, magnitude: float=1.0) -> Vector2:
+        """Create a Vector2 from an angle and magnitude, instead of directly from x/y coordinates."""
+        return Vector2(magnitude * np.cos(angle), magnitude * np.sin(angle))
+    
+    
     def __neg__(self) -> Vector2:
         return Vector2(-self.x, -self.y)
     
@@ -121,7 +127,7 @@ class Vector2(object):
     
     def __truediv__(self, scalar: int | float) -> Vector2:
         return Vector2(self.x / scalar, self.y / scalar)
-    
+
 
 @dataclass(frozen=True)
 class Body():
@@ -150,8 +156,8 @@ class PhysicsBody():
     velocity: Vector2   # m / s
         
     
-    def distance_to(self, other: Body) -> float:
-        """Calculate the Euclidean distance between two Bodies.
+    def distance_to(self, other: PhysicsBody) -> float:
+        """Calculate the Euclidean distance between two PhysicsBody's.
         
         The distance is always positive or zero.
         """
@@ -159,23 +165,83 @@ class PhysicsBody():
         return displacement.length()
     
     
-    def distance_squared_to(self, other: Body) -> float:
-        """Calculate the square of the Euclidean distance between two vectors.
+    def distance_squared_to(self, other: PhysicsBody) -> float:
+        """Calculate the square of the Euclidean distance between two PhysicsBody's.
         
         Useful for some calculations.
         """
         return (other.position.x - self.position.x)**2 + (other.position.y - self.position.y)**2
     
     
-    def direction_to(self, other: Body) -> Vector2:
-        """Calculate the normalized direction vector between the endpoints of two
-        vectors.
-        """
+    def direction_to(self, other: PhysicsBody) -> Vector2:
+        """Calculate the normalized direction vector to another PhysicsBody."""
         displacement = other.position - self.position
         return displacement.normalized()
     
+    
+    def gravity_to(self, other: PhysicsBody):
+        """Calculate the norm of the gravitational force between two PhysicsBody's."""
+        dst2 = self.distance_squared_to(other)
+        
+        if dst2 == 0.0:
+            return 0.0
+        
+        return G * self.mass * other.mass / dst2
 
+
+@dataclass
+class System(object):
+    bodies: dict[UUID, PhysicsBody]
+    
+    
+    def get_body(self, uuid: UUID) -> PhysicsBody:
+        """Retrieve a specific body based on its UUID."""
+        try:
+            return self.bodies[uuid]
+        except KeyErroras as KE:
+            msg = f"{self} does not contain a body with UUID {uuid}"
+            raise BodyNotFoundError(msg) from KE
+    
+    
+    def get_body_by_name(self, name: str) -> PhysicsBody:
+        """Retrieve a specific body based on its name."""
+        for key in self.bodies.keys():
+            body = self.bodies[key]
+            if body.name == name:
+                return body
+            else:
+                continue
+        
+        msg = f"{self} does not contain a body with name '{name}'"
+        raise BodyNotFoundError(msg)
+    
+    
+    def add_body(self, body: Body, at_origin: bool=False) -> UUID:
+        if at_origin:
+            position = Vector2(0, 0)
+            velocity = Vector2(0, 0)
+            
+        elif body.parent_body is None:
+            msg = f"{body.name} does not have a parent body; it must be placed at the origin!"
+            raise ValueError(msg)
+            
+        else:
+            parent_body = self.get_body_by_name(body.parent_body.name)
+            position = parent_body.position + Vector2.from_polar(body.initial_angle, body.initial_distance)
+            velocity = parent_body.velocity + position.direction_to(parent_body.position).rotated(-np.pi/2) * body.initial_velocity
+        
+        uuid = uuid4()
+        self.bodies[uuid] = PhysicsBody(
+            uuid,
+            body.name,
+            body.mass,
+            body.radius,
+            position,
+            velocity,
+            )
+        return uuid
 
 
 if __name__ == "__main__":
-    main()
+    # tests
+    ...
