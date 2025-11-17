@@ -240,6 +240,45 @@ class System(object):
             velocity,
             )
         return uuid
+    
+    
+    def update(self, dt: float):
+        """Met à jour les PhysicsBody du System pendant dt secondes.
+        Intégrateur : Euler symplectique (v = v + a*dt ; pos = pos + v*dt)
+        """
+        forces: dict[object, Vector2] = {uid: Vector2(0.0, 0.0) for uid in self.bodies.keys()}
+        
+        uids = list(self.bodies.keys())
+
+        for i in range(len(uids)):
+            uid_i = uids[i]
+            body_i = self.bodies[uid_i]
+            for j in range(i + 1, len(uids)):
+                uid_j = uids[j]
+                body_j = self.bodies[uid_j]
+
+                force_norm = body_i.gravity_to(body_j)
+                if force_norm == 0.0:
+                    continue
+
+                dir_i_to_j = body_i.direction_to(body_j)
+
+                force_on_i = dir_i_to_j * force_norm
+
+                force_on_j = -force_on_i
+
+                forces[uid_i] = forces[uid_i] + force_on_i
+                forces[uid_j] = forces[uid_j] + force_on_j
+        
+        
+        for uid, body in self.bodies.items():
+            F = forces[uid]
+            a = F / body.mass
+            v_new = body.velocity + a * dt 
+            pos_new = body.position + v_new * dt 
+
+            body.velocity = v_new
+            body.position = pos_new
 
 
 if __name__ == "__main__":

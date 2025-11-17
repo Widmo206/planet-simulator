@@ -15,6 +15,7 @@ import random
 from physics import Body, PhysicsBody, System, Vector2, G
 import planets
 
+
 dt = 1000
 scale = 1 / 5e6
 turtles: dict = {}
@@ -58,6 +59,7 @@ def init_system() -> System:
 
     return sys
 
+
 def create_obj(shape: str = "circle", color: str = "white", shapesize: float = 1.0) -> turtle.Turtle:
     """Crée une turtle selon les spécifications des planètes."""
     t = turtle.Turtle()
@@ -68,6 +70,7 @@ def create_obj(shape: str = "circle", color: str = "white", shapesize: float = 1
     t.penup()
     t.showturtle()
     return t
+
 
 def create_turtles_for_system(sys: System, scale: float) -> dict:
     """Crée une turtle par PhysicsBody, retourne dict uuid -> turtle."""
@@ -81,42 +84,6 @@ def create_turtles_for_system(sys: System, scale: float) -> dict:
         tdict[uid] = t
     return tdict
 
-def update_system(sys: System, dt: float):
-    """Met à jour les PhysicsBody du System pendant dt secondes.
-    Intégrateur : Euler symplectique (v = v + a*dt ; pos = pos + v*dt)
-    """
-    forces: dict[object, Vector2] = {uid: Vector2(0.0, 0.0) for uid in sys.bodies.keys()}
-    
-    uids = list(sys.bodies.keys())
-
-    for i in range(len(uids)):
-        uid_i = uids[i]
-        body_i = sys.bodies[uid_i]
-        for j in range(i + 1, len(uids)):
-            uid_j = uids[j]
-            body_j = sys.bodies[uid_j]
-
-            force_norm = body_i.gravity_to(body_j)
-            if force_norm == 0.0:
-                continue
-
-            dir_i_to_j = body_i.direction_to(body_j)
-
-            force_on_i = dir_i_to_j * force_norm
-
-            force_on_j = -force_on_i
-
-            forces[uid_i] = forces[uid_i] + force_on_i
-            forces[uid_j] = forces[uid_j] + force_on_j
-
-    for uid, body in sys.bodies.items():
-        F = forces[uid]
-        a = F / body.mass
-        v_new = body.velocity + a * dt 
-        pos_new = body.position + v_new * dt 
-
-        body.velocity = v_new
-        body.position = pos_new
 
 def update_graphics(sys: System, turtles_dict: dict, scale: float):
     """Place toutes les tortues aux positions correspondantes."""
@@ -127,6 +94,7 @@ def update_graphics(sys: System, turtles_dict: dict, scale: float):
         x_pix = body.position.x * scale
         y_pix = body.position.y * scale
         t.goto(x_pix, y_pix)
+
 
 def main():
     screen = turtle.Screen()
@@ -147,7 +115,8 @@ def main():
 
     try:
         while True:
-            update_system(sys, dt)
+            sys.update(dt)
+            #update_system(sys, dt)
             update_graphics(sys, turtles, scale)
             screen.update()
             time.sleep(0.01)
@@ -155,6 +124,7 @@ def main():
         return
     except KeyboardInterrupt:
         return
+
 
 if __name__ == "__main__":
     main()
