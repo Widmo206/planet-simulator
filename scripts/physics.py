@@ -138,6 +138,8 @@ class Body():
     name: str
     mass: float         # kg
     radius: float       # m
+    
+    color: str = "white"
 
     parent_body: Body | None = None
     initial_distance: float  = 0.0
@@ -151,6 +153,8 @@ class PhysicsBody():
     name: str
     mass: float         # kg
     radius: float       # m
+    
+    color: str
 
     position: Vector2   # m
     velocity: Vector2   # m / s
@@ -236,6 +240,7 @@ class System(object):
             body.name,
             body.mass,
             body.radius,
+            body.color,
             position,
             velocity,
             )

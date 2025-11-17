@@ -15,23 +15,41 @@ name:             str
 mass:             float         # kg
 radius:           float         # m
 
+color: str = "white"
+
 parent_body:      Body   = None
 initial_distance: float  = 0.0  # m
 initial_angle:    float  = 0.0  # rad
 initial_velocity: float  = 0.0  # m / s
 """
 
+PLANET_COLOR = {
+    "Sun": "yellow",
+    "Mercury": "gray",
+    "Venus": "orange",
+    "Earth": "blue",
+    "Moon": "lightgray",
+    "Mars": "red",
+    "Jupiter": "saddle brown",
+    "Saturn": "khaki",
+    "Uranus": "light blue",
+    "Neptune": "navy"
+}
+
+
 
 Earth = Body(
     name="Earth",
     mass=5.972e24,
     radius=6371008.771,
+    color="blue",
     )
 
 Moon = Body(
     name="Moon",
     mass=7.346e22,
     radius=1737.4e3,
+    color="lightgray",
     parent_body=Earth,
     initial_distance=384784e3,
     initial_angle=math.radians(134),

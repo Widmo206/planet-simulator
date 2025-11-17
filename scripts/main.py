@@ -16,8 +16,11 @@ from physics import Body, PhysicsBody, System, Vector2, G
 import planets
 
 
-dt = 1000
-scale = 1 / 5e6
+SCALE = 1 / 5e6
+TIMESCALE = 100_000
+TPS = 100
+
+
 turtles: dict = {}
 planets_list = [
     obj for obj in planets.__dict__.values()
@@ -26,19 +29,37 @@ planets_list = [
 
 planets: dict = {}
 
-# Couleurs par défaut
-PLANET_COLOR = {
-    "Sun": "yellow",
-    "Mercury": "gray",
-    "Venus": "orange",
-    "Earth": "blue",
-    "Moon": "lightgray",
-    "Mars": "red",
-    "Jupiter": "saddle brown",
-    "Saturn": "khaki",
-    "Uranus": "light blue",
-    "Neptune": "navy"
-}
+
+def main():
+    screen = turtle.Screen()
+    screen.title("Simulation Système Planétaire")
+    screen.bgcolor("black")
+    screen.setup(width=1000, height=800)
+    screen.tracer(0)
+    
+    
+    sys = init_system()
+    global turtles
+    turtles = create_turtles_for_system(sys, SCALE)
+
+    try:
+        sun_uid = next(uid for uid, b in sys.bodies.items() if b.name.lower() == "sun")
+        sun_pos = sys.bodies[sun_uid].position
+    except StopIteration:
+        pass
+    
+    dt = TIMESCALE / TPS
+    try:
+        while True:
+            sys.update(dt)
+            #update_system(sys, dt)
+            update_graphics(sys, turtles, SCALE)
+            screen.update()
+            time.sleep(1/TPS)
+    except turtle.Terminator:
+        return
+    except KeyboardInterrupt:
+        return
 
 
 def init_system() -> System:
@@ -72,58 +93,29 @@ def create_obj(shape: str = "circle", color: str = "white", shapesize: float = 1
     return t
 
 
-def create_turtles_for_system(sys: System, scale: float) -> dict:
+def create_turtles_for_system(sys: System, SCALE: float) -> dict:
     """Crée une turtle par PhysicsBody, retourne dict uuid -> turtle."""
     tdict = {}
     for uid, body in sys.bodies.items():
-        color = PLANET_COLOR.get(body.name, random.choice(
-            ["white", "lightgreen", "violet", "cyan", "pink"]))
-        radius_pixels = body.radius * scale
+        #color = PLANET_COLOR.get(body.name, random.choice(
+        #    ["white", "lightgreen", "violet", "cyan", "pink"]))
+        color = body.color
+        radius_pixels = body.radius * SCALE
         shapesize = max(0.2, radius_pixels / 10.0)
         t = create_obj(shape="circle", color=color, shapesize=shapesize)
         tdict[uid] = t
     return tdict
 
 
-def update_graphics(sys: System, turtles_dict: dict, scale: float):
+def update_graphics(sys: System, turtles_dict: dict, SCALE: float):
     """Place toutes les tortues aux positions correspondantes."""
     for uid, body in sys.bodies.items():
         t = turtles_dict.get(uid)
         if t is None:
             continue
-        x_pix = body.position.x * scale
-        y_pix = body.position.y * scale
+        x_pix = body.position.x * SCALE
+        y_pix = body.position.y * SCALE
         t.goto(x_pix, y_pix)
-
-
-def main():
-    screen = turtle.Screen()
-    screen.title("Simulation Système Planétaire")
-    screen.bgcolor("black")
-    screen.setup(width=1000, height=800)
-    screen.tracer(0)
-
-    sys = init_system()
-    global turtles
-    turtles = create_turtles_for_system(sys, scale)
-
-    try:
-        sun_uid = next(uid for uid, b in sys.bodies.items() if b.name.lower() == "sun")
-        sun_pos = sys.bodies[sun_uid].position
-    except StopIteration:
-        pass
-
-    try:
-        while True:
-            sys.update(dt)
-            #update_system(sys, dt)
-            update_graphics(sys, turtles, scale)
-            screen.update()
-            time.sleep(0.01)
-    except turtle.Terminator:
-        return
-    except KeyboardInterrupt:
-        return
 
 
 if __name__ == "__main__":
