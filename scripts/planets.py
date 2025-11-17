@@ -37,11 +37,18 @@ PLANET_COLOR = {
 }
 
 
+# Sun = Body(
+#     name="Sun",
+#     mass=1.9885e30,
+#     radius=695_700e3,
+#     color="yellow"
+#     )
+
 
 Earth = Body(
     name="Earth",
     mass=5.972e24,
-    radius=6371008.771,
+    radius=6_371_008.771,
     color="blue",
     )
 

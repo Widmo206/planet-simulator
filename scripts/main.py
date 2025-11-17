@@ -11,13 +11,14 @@ Contributors:
 import turtle
 import time
 import math
-import random
+#import random
 from physics import Body, PhysicsBody, System, Vector2, G
 import planets
 
 
+PLANET_SCALE = 0.5
 SCALE = 1 / 5e6
-TIMESCALE = 100_000
+TIMESCALE = 1e5
 TPS = 100
 
 
@@ -27,7 +28,7 @@ planets_list = [
     if isinstance(obj, Body)
 ]
 
-planets: dict = {}
+planets_dict: dict = {}
 
 
 def main():
@@ -76,7 +77,7 @@ def init_system() -> System:
         sys.add_body(b)
 
     for uid, phys in sys.bodies.items():
-        planets[uid] = phys
+        planets_dict[uid] = phys
 
     return sys
 
@@ -93,28 +94,31 @@ def create_obj(shape: str = "circle", color: str = "white", shapesize: float = 1
     return t
 
 
-def create_turtles_for_system(sys: System, SCALE: float) -> dict:
+def create_turtles_for_system(sys: System, scale: float) -> dict:
     """Crée une turtle par PhysicsBody, retourne dict uuid -> turtle."""
     tdict = {}
     for uid, body in sys.bodies.items():
         #color = PLANET_COLOR.get(body.name, random.choice(
         #    ["white", "lightgreen", "violet", "cyan", "pink"]))
+        #radius_pixels = body.radius * SCALE
+        #shapesize = max(0.2, radius_pixels / 10.0)
+        
         color = body.color
-        radius_pixels = body.radius * SCALE
-        shapesize = max(0.2, radius_pixels / 10.0)
+        shapesize = math.sqrt(body.radius / planets.Earth.radius) * PLANET_SCALE
+        
         t = create_obj(shape="circle", color=color, shapesize=shapesize)
         tdict[uid] = t
     return tdict
 
 
-def update_graphics(sys: System, turtles_dict: dict, SCALE: float):
+def update_graphics(sys: System, turtles_dict: dict, scale: float):
     """Place toutes les tortues aux positions correspondantes."""
     for uid, body in sys.bodies.items():
         t = turtles_dict.get(uid)
         if t is None:
             continue
-        x_pix = body.position.x * SCALE
-        y_pix = body.position.y * SCALE
+        x_pix = body.position.x * scale
+        y_pix = body.position.y * scale
         t.goto(x_pix, y_pix)
 
 
