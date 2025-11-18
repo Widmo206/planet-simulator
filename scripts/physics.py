@@ -251,16 +251,16 @@ class System(object):
         """Met à jour les PhysicsBody du System pendant dt secondes.
         Intégrateur : Euler symplectique (v = v + a*dt ; pos = pos + v*dt)
         """
-        forces: dict[object, Vector2] = {uid: Vector2(0.0, 0.0) for uid in self.bodies.keys()}
+        forces: dict[UUID, Vector2] = {uuid: Vector2(0.0, 0.0) for uuid in self.bodies.keys()}
         
-        uids = list(self.bodies.keys())
+        uuids = list(self.bodies.keys())
 
-        for i in range(len(uids)):
-            uid_i = uids[i]
-            body_i = self.bodies[uid_i]
-            for j in range(i + 1, len(uids)):
-                uid_j = uids[j]
-                body_j = self.bodies[uid_j]
+        for i in range(len(uuids)):
+            uuid_i = uuids[i]
+            body_i = self.bodies[uuid_i]
+            for j in range(i + 1, len(uuids)):
+                uuid_j = uuids[j]
+                body_j = self.bodies[uuid_j]
 
                 force_norm = body_i.gravity_to(body_j)
                 if force_norm == 0.0:
@@ -272,12 +272,12 @@ class System(object):
 
                 force_on_j = -force_on_i
 
-                forces[uid_i] = forces[uid_i] + force_on_i
-                forces[uid_j] = forces[uid_j] + force_on_j
+                forces[uuid_i] = forces[uuid_i] + force_on_i
+                forces[uuid_j] = forces[uuid_j] + force_on_j
         
         
-        for uid, body in self.bodies.items():
-            F = forces[uid]
+        for uuid, body in self.bodies.items():
+            F = forces[uuid]
             a = F / body.mass
             v_new = body.velocity + a * dt 
             pos_new = body.position + v_new * dt 
