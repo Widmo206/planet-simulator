@@ -17,8 +17,8 @@ import planets
 
 
 PLANET_SCALE = 0.5
-SCALE = 1 / 5e6
-TIMESCALE = 1e5
+SCALE = 1 / 5e8
+TIMESCALE = 1e6
 TPS = 100
 
 
