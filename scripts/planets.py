@@ -116,6 +116,54 @@ Jupiter = Body(
     )
 
 
+Io = Body(
+    name="Io",
+    mass=8.931e22,
+    radius=1821.6e3,
+    color="yellow",
+    parent_body=Jupiter,
+    initial_distance=421700e3,
+    initial_angle=math.radians(0),
+    initial_velocity=17.334e3,
+    )
+
+
+Europa = Body(
+    name="Europa",
+    mass=4.79984e22,
+    radius=1560.6e3,
+    color="tan",
+    parent_body=Jupiter,
+    initial_distance=670900e3,
+    initial_angle=math.radians(90),
+    initial_velocity=13743.36,
+    )
+
+
+Ganymede = Body(
+    name="Ganymede",
+    mass=1.4819e23,
+    radius=2634.1e3,
+    color="light gray",
+    parent_body=Jupiter,
+    initial_distance=1070400e3,
+    initial_angle=math.radians(180),
+    initial_velocity=10.880e3,
+    )
+
+
+Callisto = Body(
+    name="Callisto",
+    mass=1.075938e23,
+    radius=2410.3e3,
+    color="gray",
+    parent_body=Jupiter,
+    initial_distance=1882700e3,
+    initial_angle=math.radians(270),
+    initial_velocity=8.204e3,
+    )
+
+
 Saturn = Body(
     name="Saturn",
     mass=5.6834e26,
@@ -125,6 +173,18 @@ Saturn = Body(
     initial_distance=1514e9,
     initial_angle=math.radians(296.412),
     initial_velocity=9.09e3,
+    )
+
+
+Titan = Body(
+    name="Titan",
+    mass=1.345e23,
+    radius=2574.73e3,
+    color="gray",
+    parent_body=Saturn,
+    initial_distance=1221870e3,
+    initial_angle=math.radians(270),
+    initial_velocity=5.57e3,
     )
 
 

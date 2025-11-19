@@ -18,8 +18,8 @@ import planets
 
 PLANET_SCALE = 0.15
 SCALE = 1 / 5e9
-TIMESCALE = 1e7
-TPS = 100
+TIMESCALE = 2e7
+TPS = 120
 
 
 turtles: dict = {}
