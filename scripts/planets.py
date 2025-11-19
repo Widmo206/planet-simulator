@@ -23,19 +23,6 @@ initial_angle:    float  = 0.0  # rad
 initial_velocity: float  = 0.0  # m / s
 """
 
-PLANET_COLOR = {
-    "Sun": "yellow",
-    "Mercury": "gray",
-    "Venus": "orange",
-    "Earth": "blue",
-    "Moon": "lightgray",
-    "Mars": "red",
-    "Jupiter": "saddle brown",
-    "Saturn": "khaki",
-    "Uranus": "light blue",
-    "Neptune": "navy"
-}
-
 
 Sun = Body(
     name="Sun",
@@ -129,6 +116,40 @@ Jupiter = Body(
     )
 
 
+Saturn = Body(
+    name="Saturn",
+    mass=5.6834e26,
+    radius=60268e3,
+    color="khaki",
+    parent_body=Sun,
+    initial_distance=1514e9,
+    initial_angle=math.radians(296.412),
+    initial_velocity=9.09e3,
+    )
+
+
+Uranus = Body(
+    name="Uranus",
+    mass=86.811e24,
+    radius=25559e3,
+    color="light blue",
+    parent_body=Sun,
+    initial_distance=3001.390e9,
+    initial_angle=math.radians(216.245),
+    initial_velocity=6.49e3,
+    )
+
+
+Neptune = Body(
+    name="Neptune",
+    mass=1.02409e26,
+    radius=24622e3,
+    color="navy",
+    parent_body=Sun,
+    initial_distance=4558.857e9,
+    initial_angle=math.radians(173.070),
+    initial_velocity=5.45e3,
+    )
 
 
 
