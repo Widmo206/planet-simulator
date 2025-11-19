@@ -211,7 +211,7 @@ class System(object):
         """Retrieve a specific body based on its name."""
         for key in self.bodies.keys():
             body = self.bodies[key]
-            if body.name == name:
+            if body.name.lower() == name.lower():
                 return body
             else:
                 continue
