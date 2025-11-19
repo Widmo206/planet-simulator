@@ -81,16 +81,16 @@ Earth = Body(
     )
 
 
-# Moon = Body(
-#     name="Moon",
-#     mass=7.346e22,
-#     radius=1737.4e3,
-#     color="lightgray",
-#     parent_body=Earth,
-#     initial_distance=384784e3,
-#     initial_angle=math.radians(134),
-#     initial_velocity=1.022e3,
-#     )
+Moon = Body(
+    name="Moon",
+    mass=7.346e22,
+    radius=1737.4e3,
+    color="lightgray",
+    parent_body=Earth,
+    initial_distance=384784e3,
+    initial_angle=math.radians(134),
+    initial_velocity=1.022e3,
+    )
 
 
 Mars = Body(
@@ -102,6 +102,30 @@ Mars = Body(
     initial_distance=206650000e3,
     initial_angle=math.radians(305.912),
     initial_velocity=26.5e3,
+    )
+
+
+Ceres = Body(
+    name="Ceres",
+    mass=9.3839e20,
+    radius=469.7e3,
+    color="lightgray",
+    parent_body=Sun,
+    initial_distance=381e9,
+    initial_angle=math.radians(5.0),
+    initial_velocity=17.9e3,
+    )
+
+
+Jupiter = Body(
+    name="Jupiter",
+    mass=1.8982e27,
+    radius=71492e3,
+    color="saddle brown",
+    parent_body=Sun,
+    initial_distance=778e9,
+    initial_angle=math.radians(293.887),
+    initial_velocity=13.06e3,
     )
 
 

@@ -16,8 +16,8 @@ from physics import Body, PhysicsBody, System, Vector2, G
 import planets
 
 
-PLANET_SCALE = 0.5
-SCALE = 1 / 5e8
+PLANET_SCALE = 0.12
+SCALE = 1 / 2e9
 TIMESCALE = 1e6
 TPS = 100
 
