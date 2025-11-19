@@ -16,9 +16,9 @@ from physics import Body, PhysicsBody, System, Vector2, G
 import planets
 
 
-PLANET_SCALE = 0.12
+PLANET_SCALE = 0.15
 SCALE = 1 / 2e9
-TIMESCALE = 1e6
+TIMESCALE = 1e7
 TPS = 100
 
 
@@ -53,7 +53,6 @@ def main():
     try:
         while True:
             sys.update(dt)
-            #update_system(sys, dt)
             update_graphics(sys, turtles, SCALE)
             screen.update()
             time.sleep(1/TPS)
@@ -104,7 +103,9 @@ def create_turtles_for_system(sys: System, scale: float) -> dict:
         #shapesize = max(0.2, radius_pixels / 10.0)
         
         color = body.color
-        shapesize = math.sqrt(body.radius / planets.Earth.radius) * PLANET_SCALE
+        radius_pixels = math.sqrt(body.radius / planets.Earth.radius) * PLANET_SCALE
+        shapesize = max(0.15, radius_pixels)
+        
         
         t = create_obj(shape="circle", color=color, shapesize=shapesize)
         tdict[uid] = t
