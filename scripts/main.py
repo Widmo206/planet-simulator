@@ -125,6 +125,7 @@ def init_system(show_moons: bool) -> System:
         sys.add_body(b, at_origin=True)
 
     for b in child_bodies:
+        # only add moons if they're enabled
         if b.parent_body in root_bodies or show_moons:
             sys.add_body(b)
 
@@ -150,10 +151,6 @@ def create_turtles_for_system(sys: System, scale: float) -> dict:
     """Crée une turtle par PhysicsBody, retourne dict uuid -> turtle."""
     tdict = {}
     for uid, body in sys.bodies.items():
-        #color = PLANET_COLOR.get(body.name, random.choice(
-        #    ["white", "lightgreen", "violet", "cyan", "pink"]))
-        #radius_pixels = body.radius * SCALE
-        #shapesize = max(0.2, radius_pixels / 10.0)
         
         color = body.color
         radius_pixels = math.sqrt(body.radius / planets.Earth.radius) * PLANET_SCALE
