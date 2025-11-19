@@ -14,6 +14,7 @@ import math
 #import random
 from physics import Body, PhysicsBody, System, Vector2, G
 import planets
+from get_input import get_input
 
 
 PLANET_SCALE = 0.15
@@ -32,6 +33,34 @@ planets_dict: dict = {}
 
 
 def main():
+    # why do I need to do this?
+    global PLANET_SCALE
+    global SCALE
+    global TIMESCALE
+    
+    
+    print("Bienvenue dans le simulateur du système solaire.")
+    print()
+    print("================================================")
+    print()
+    print("Veulliez choisir les paramètres (ou appuiyez sur retour pour accepter les valeurs par defaut).\n")
+    
+    print(f"Échelle de distances ({SCALE})")
+    new_value = get_input(float, True, (0, None), True)
+    if new_value is not None:
+        SCALE = new_value
+        
+    print(f"Échelle des planètes ({PLANET_SCALE})")
+    new_value = get_input(float, True, (0, None), True)
+    if new_value is not None:
+        PLANET_SCALE = new_value
+        
+    print(f"Échelle du temps ({TIMESCALE})")
+    new_value = get_input(float, True, (0, None), True)
+    if new_value is not None:
+        TIMESCALE = new_value
+    
+    
     screen = turtle.Screen()
     screen.title("Simulation Système Planétaire")
     screen.bgcolor("black")
